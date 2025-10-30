@@ -1,5 +1,8 @@
 package com.example.midterm_patrick_solalmillo;
 
+
+
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,6 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -54,10 +58,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         multResult.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String removed = rows.remove(position);
-                adapter.notifyDataSetChanged();
-                Toast.makeText(MainActivity.this,
-                        "Deleted: " + removed, Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                builder.setMessage("Delete row?")
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String removed = rows.remove(position);
+                        adapter.notifyDataSetChanged();
+                        Toast.makeText(MainActivity.this,
+                                "Deleted: " + removed, Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+                        .setNegativeButton("Cancel",new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                });
+
+                
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 return true;
             }
         });
