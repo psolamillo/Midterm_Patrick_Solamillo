@@ -2,6 +2,7 @@ package com.example.midterm_patrick_solalmillo;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,6 +50,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 android.R.layout.simple_list_item_1,
             rows);
         multResult.setAdapter(adapter);
+
+        multResult.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String removed = rows.remove(position);
+                adapter.notifyDataSetChanged();
+                Toast.makeText(MainActivity.this,
+                        "Deleted: " + removed, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
 
     }
 
