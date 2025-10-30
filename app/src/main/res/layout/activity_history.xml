@@ -8,8 +8,22 @@
     android:orientation="vertical"
     tools:context=".HistoryActivity">
 
+    <Button
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="back"/>
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="HISTORYACTIVITY"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="History"
+        android:layout_weight="0"/>
+
+    <ListView
+        android:id="@+id/histList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
 </LinearLayout>

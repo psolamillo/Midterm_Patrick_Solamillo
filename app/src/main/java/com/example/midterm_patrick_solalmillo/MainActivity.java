@@ -4,6 +4,7 @@ package com.example.midterm_patrick_solalmillo;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,11 +21,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     //private EditText multNumber;
+    private static final String SHARED_PREF ="History";
+    private static final String History = "history_list";
     private Button multButton;
     private Button historyButton;
     private ListView multResult;
@@ -33,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int product;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> rows = new ArrayList<>();
+    private ArrayList<String> history = new ArrayList<>();
+    private ArrayList<String> numHistory = new ArrayList<>();
+    private Gson gson = new Gson();
 
 
 
@@ -41,11 +51,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        loadHistory();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
         editText = (EditText)findViewById(R.id.inputNum);
         multResult = findViewById(R.id.resultList);
         multButton = findViewById(R.id.buttonM);
@@ -58,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 android.R.layout.simple_list_item_1,
             rows);
         multResult.setAdapter(adapter);
+
 
         multResult.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -96,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v)
     {
 
-        rows.clear();
+        //rows.clear();
         String txt = editText.getText().toString().trim();
         if(v.getId() == R.id.buttonM){
             Toast.makeText(this, "Button Clicked", Toast.LENGTH_SHORT).show();
@@ -111,8 +125,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
 
+            adapter.notifyDataSetChanged();
+            numHistory.add(txt);
+            saveHistory();
         }
-        adapter.notifyDataSetChanged();
+
 
         if (v.getId() == R.id.historyButton)
         {
@@ -122,6 +139,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
+
+    }
+    private void saveHistory() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
+        String jsonHistory = gson.toJson(numHistory);
+
+        sharedPreferences.edit()
+                .putString(History,jsonHistory)
+                .apply();
+    }
+
+    private void loadHistory(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
+        String jsonHistory = sharedPreferences.getString(History,null);
+        Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+        numHistory = gson.fromJson(jsonHistory,listType);
 
     }
 }
