@@ -3,6 +3,7 @@ package com.example.midterm_patrick_solalmillo;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //private EditText multNumber;
     private Button multButton;
+    private Button historyButton;
     private ListView multResult;
 
     EditText editText;
@@ -47,7 +49,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editText = (EditText)findViewById(R.id.inputNum);
         multResult = findViewById(R.id.resultList);
         multButton = findViewById(R.id.buttonM);
+        historyButton = findViewById(R.id.historyButton);
         multButton.setOnClickListener(this);
+        historyButton.setOnClickListener(this);
 
 
         adapter = new ArrayAdapter<>(this,
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                 });
 
-                
+
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 return true;
@@ -109,6 +113,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         adapter.notifyDataSetChanged();
+
+        if (v.getId() == R.id.historyButton)
+        {
+            Toast.makeText(this, "HISTORYACTIVITYSTART", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+            startActivity(intent);
+        }
 
 
 
