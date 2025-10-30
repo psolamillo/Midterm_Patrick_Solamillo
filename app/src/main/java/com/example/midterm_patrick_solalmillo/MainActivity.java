@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,15 +14,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private EditText multNumber;
+    //private EditText multNumber;
     private Button multButton;
     private ListView multResult;
 
     EditText editText;
     int product;
     private ArrayAdapter<String> adapter;
+    private ArrayList<String> rows = new ArrayList<>();
 
 
 
@@ -36,27 +40,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return insets;
         });
         editText = (EditText)findViewById(R.id.inputNum);
+        multResult = findViewById(R.id.resultList);
+        multButton = findViewById(R.id.buttonM);
         multButton.setOnClickListener(this);
+
+
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+            rows);
+        multResult.setAdapter(adapter);
 
     }
 
     @Override
     public void onClick(View v)
     {
+
+        rows.clear();
+        String txt = editText.getText().toString().trim();
         if(v.getId() == R.id.buttonM){
-            StringBuffer buffer = new StringBuffer();
+            Toast.makeText(this, "Button Clicked", Toast.LENGTH_SHORT).show();
 
-            String fs = editText.getText().toString();
 
-            int numMult = Integer.parseInt(fs);
+            int numMult = Integer.parseInt(txt);
 
             for (int i = 1; i <= 10; i++) {
                 product = (i * numMult);
-                buffer.append(numMult + " X " +
-                        i + " = " + numMult + "\n\n");
+                rows.add(numMult + " X " + i + " = " + product);
+
+
             }
 
         }
+        adapter.notifyDataSetChanged();
+
 
 
     }
